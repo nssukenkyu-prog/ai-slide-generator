@@ -15,8 +15,16 @@ except ImportError:
     """
 
 def generate_json_from_text(text_input, api_key):
+    print(f"DEBUG: google-generativeai version: {genai.__version__}")
     genai.configure(api_key=api_key)
     
+    try:
+        print("DEBUG: Listing available models...")
+        for m in genai.list_models():
+            print(f"DEBUG: Found model: {m.name}")
+    except Exception as e:
+        print(f"DEBUG: Failed to list models: {e}")
+
     # List of models to try in order of preference
     models_to_try = ['gemini-1.5-flash', 'gemini-1.5-flash-001', 'gemini-pro']
     
