@@ -16,22 +16,30 @@ except ImportError:
 
 def generate_json_from_text(text_input, api_key):
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
     
-    try:
-        response = model.generate_content(
-            contents=[SYSTEM_PROMPT, f"Input Text:\n{text_input}"],
-            generation_config={"response_mime_type": "application/json"}
-        )
-        text = response.text
-        if "```json" in text:
-            text = text.split("```json")[1].split("```")[0]
-        elif "```" in text:
-            text = text.split("```")[1].split("```")[0]
-        return json.loads(text)
-    except Exception as e:
-        print(f"Error generating JSON: {e}")
-        return None
+    # List of models to try in order of preference
+    models_to_try = ['gemini-1.5-flash', 'gemini-1.5-flash-001', 'gemini-pro']
+    
+    for model_name in models_to_try:
+        try:
+            print(f"DEBUG: Trying model {model_name}...")
+            model = genai.GenerativeModel(model_name)
+            response = model.generate_content(
+                contents=[SYSTEM_PROMPT, f"Input Text:\n{text_input}"],
+                generation_config={"response_mime_type": "application/json"}
+            )
+            text = response.text
+            if "```json" in text:
+                text = text.split("```json")[1].split("```")[0]
+            elif "```" in text:
+                text = text.split("```")[1].split("```")[0]
+            return json.loads(text)
+        except Exception as e:
+            print(f"Error with model {model_name}: {e}")
+            continue # Try next model
+            
+    print("Error: All models failed.")
+    return None
 
 def escape_vba(text):
     if not text:
