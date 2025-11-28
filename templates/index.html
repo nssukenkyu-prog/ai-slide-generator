@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Slide Generator (Custom)</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4285F4;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        input[type="text"],
+        input[type="color"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input[type="color"] {
+            height: 50px;
+            padding: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #3367D6;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI スライドジェネレーター</h1>
+        <form action="/preview" method="POST">
+            <div class="form-group">
+                <label for="api_key">Gemini APIキー (サーバーで設定済みの場合は不要)</label>
+                <input type="text" id="api_key" name="api_key" placeholder="AIzaSy...">
+            </div>
+
+            <div class="form-group">
+                <label for="text_input">プレゼンテーションの内容 / アウトライン</label>
+                <textarea id="text_input" name="text_input" placeholder="ここにテキストを貼り付けてください..." required></textarea>
+                <p class="note">AIが自動的にスライド構成を生成します。</p>
+            </div>
+
+            <div class="form-group">
+                <label for="primary_color">メインテーマカラー</label>
+                <input type="color" id="primary_color" name="primary_color" value="#4285F4">
+            </div>
+
+            <div class="form-group">
+                <label for="title_color">タイトル文字色</label>
+                <input type="color" id="title_color" name="title_color" value="#333333">
+            </div>
+
+            <div class="form-group">
+                <label for="body_color">本文文字色</label>
+                <input type="color" id="body_color" name="body_color" value="#333333">
+            </div>
+
+            <div class="form-group">
+                <label for="font_family">フォントファミリー</label>
+                <input type="text" id="font_family" name="font_family" value="Meiryo">
+            </div>
+
+            <button type="submit">内容を確認・編集する</button>
+        </form>
+    </div>
+</body>
+
+</html>

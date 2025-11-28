@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スライド内容の確認・編集</title>
+    <style>
+        body {
+            font-family: 'Meiryo', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4285F4;
+            margin-bottom: 30px;
+        }
+
+        .slide-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4285F4;
+        }
+
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .actions {
+            position: sticky;
+            bottom: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        button {
+            padding: 15px 40px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3367D6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>スライド内容の確認・編集</h1>
+        <form action="/download" method="POST">
+            <!-- Hidden fields to pass through style settings -->
+            <input type="hidden" name="title_color" value="{{ settings.title_color }}">
+            <input type="hidden" name="body_color" value="{{ settings.body_color }}">
+            <input type="hidden" name="slide_count" value="{{ slides|length }}">
+            <input type="hidden" name="primary_color" value="{{ settings.primary_color }}">
+            <input type="hidden" name="font_family" value="{{ settings.font_family }}">
+
+            {% for slide in slides %}
+            <div class="slide-card">
+                <div class="slide-header">
+                    <span>スライド {{ loop.index }}</span>
+                    <span>タイプ: {{ slide.type }}</span>
+                </div>
+
+                <!-- Hidden Type -->
+                <input type="hidden" name="slide_{{ loop.index0 }}_type" value="{{ slide.type }}">
+
+                <div class="form-group">
+                    <label>タイトル</label>
+                    <input type="text" name="slide_{{ loop.index0 }}_title" value="{{ slide.title }}">
+                </div>
+
+                {% if slide.subhead is defined %}
+                <div class="form-group">
+                    <label>サブタイトル</label>
+                    <input type="text" name="slide_{{ loop.index0 }}_subhead" value="{{ slide.subhead }}">
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label>内容 (箇条書きは改行で区切ってください)</label>
+                    <textarea name="slide_{{ loop.index0 }}_content">{{ slide.content_text }}</textarea>
+                </div>
+
+                <!-- Preserve other hidden fields if necessary, e.g. sectionNo -->
+                {% if slide.sectionNo is defined %}
+                <input type="hidden" name="slide_{{ loop.index0 }}_sectionNo" value="{{ slide.sectionNo }}">
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="actions">
+                <button type="submit">VBAコードをダウンロード</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
