@@ -26,7 +26,8 @@ def generate_json_from_text(text_input, api_key):
         print(f"DEBUG: Failed to list models: {e}")
 
     # List of models to try in order of preference
-    models_to_try = ['gemini-1.5-flash', 'gemini-1.5-flash-001', 'gemini-pro']
+    # Based on available models from logs: gemini-2.0-flash, gemini-flash-latest
+    models_to_try = ['gemini-2.0-flash', 'gemini-flash-latest', 'gemini-1.5-flash']
     
     for model_name in models_to_try:
         try:
